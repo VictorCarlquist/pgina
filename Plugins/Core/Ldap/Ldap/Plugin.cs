@@ -34,14 +34,23 @@ using log4net;
 
 using pGina.Shared.Interfaces;
 using pGina.Shared.Types;
+using WinSCP;
+using System.IO;
+using System.Security.AccessControl;
+using System.Security.Principal;
 
 namespace pGina.Plugin.Ldap
 {
     public class LdapPlugin : IStatefulPlugin, IPluginAuthentication, IPluginAuthorization, IPluginAuthenticationGateway, IPluginConfiguration, IPluginChangePassword
     {
-        public static readonly Guid LdapUuid = new Guid("{0F52390B-C781-43AE-BD62-553C77FA4CF7}");
+        public static readonly Guid LdapUuid = new Guid("{0F52390B-C781-43AA-BD62-553C77FA4CF7}");
         private ILog m_logger = LogManager.GetLogger("LdapPlugin");
-        
+
+        private static string getPathToLoginScript(string user)
+        {
+            return @"D:\loginScript.bat";
+        }
+
         public LdapPlugin()
         {
             using(Process me = Process.GetCurrentProcess())
@@ -88,7 +97,10 @@ namespace pGina.Plugin.Ldap
 
                 // Authenticate the login
                 m_logger.DebugFormat("Attempting authentication for {0}", userInfo.Username);
-                return server.Authenticate(userInfo.Username, userInfo.Password);
+
+                // Se o login foi realizado com sucesso, vamos mapear o disco da rede.
+                BooleanResult result = server.Authenticate(userInfo.Username, userInfo.Password);
+                return result;
             }
             catch (Exception e)
             {
@@ -293,6 +305,112 @@ namespace pGina.Plugin.Ldap
             return WeAuthedThisUser(properties);
         }
 
+        static void ExecuteCommand(string command)
+        {
+            var processInfo = new ProcessStartInfo("cmd.exe", "/c " + command);
+            processInfo.CreateNoWindow = true;
+            processInfo.UseShellExecute = false;
+
+            var process = Process.Start(processInfo);
+
+            process.WaitForExit();
+            process.Close();
+        }
+
+        // Adds an ACL entry on the specified file for the specified account.
+        public static void AddFileSecurity(string fileName, string account,
+            FileSystemRights rights, AccessControlType controlType)
+        {
+
+
+            // Get a FileSecurity object that represents the
+            // current security settings.
+            FileSecurity fSecurity = File.GetAccessControl(fileName);
+
+            // Add the FileSystemAccessRule to the security settings.
+            fSecurity.AddAccessRule(new FileSystemAccessRule(account,
+                rights, controlType));
+
+            // Set the new access settings.
+            File.SetAccessControl(fileName, fSecurity);
+
+        }
+
+
+        private void LoginScipt(string paramScriptPath, List<string> groups, UserInformation userInfo, LdapServer serv, Session session)
+        {
+            int len_groups = groups.Count;
+            int i = 0;
+            do
+            {
+                string script_path = paramScriptPath;
+                if (!script_path.Contains("%g"))
+                    len_groups = 0;  // ignore groups 
+
+                script_path = script_path.Replace("%u", userInfo.Username.Trim());
+
+                // Verifica se o usuário está em um grupo.
+                
+                if (len_groups > 0 && i < len_groups)
+                {
+                    if (serv.MemberOfGroup(userInfo.Username, groups[i].Trim()))
+                    {
+                        script_path = script_path.Replace("%g", groups[i].Trim());
+                        m_logger.DebugFormat("Replacing %g to |{0}| ", groups[i].Trim());
+                    }
+                    else
+                    {
+                        i++;
+                        continue;
+                    }
+                }
+
+                TransferOperationResult transferResult;
+                if (!session.FileExists(script_path))
+                {
+                    i++;
+                    if (i >= len_groups)
+                        return;
+                    m_logger.DebugFormat("File {0} doesn't exist!", script_path);
+                    continue;
+                }
+
+                m_logger.DebugFormat("Downloading file {0} ", script_path);
+                transferResult = session.GetFiles(script_path, @"D:\", false, null);
+
+                // Throw on any error
+                transferResult.Check();
+
+                // Print results
+                foreach (TransferEventArgs transfer in transferResult.Transfers)
+                {
+                    m_logger.DebugFormat("Downalod of {0} succeeded", transfer.FileName);
+                }
+                int index = script_path.LastIndexOf(@"\");
+                if (index < 0)
+                    index = script_path.LastIndexOf("/");
+                if (index < 0)
+                    index = -1;
+                script_path = script_path.Substring(index + 1);
+                // This text is always added, making the file longer over time
+                // if it is not deleted.
+                m_logger.DebugFormat("Saving script {0}", script_path);
+                using (StreamWriter sw = new StreamWriter(getPathToLoginScript(userInfo.Username), true))
+                {
+                    System.IO.StreamReader file = new System.IO.StreamReader(@"D:\" + script_path);
+                    string line = "";
+                    while ((line = file.ReadLine()) != null)
+                    {
+                        sw.WriteLine(line);
+                    }
+                    file.Close();
+                }
+                ExecuteCommand(@"DEL D:\" + script_path);
+                i++;
+            } while (i < len_groups);
+
+        }
+
         public BooleanResult AuthenticatedUserGateway(SessionProperties properties)
         {
             m_logger.Debug("LDAP Plugin Gateway");
@@ -339,10 +457,10 @@ namespace pGina.Plugin.Ldap
 
                     if (rule.RuleMatch(inGroup))
                     {
-                        m_logger.InfoFormat("Adding user {0} to local group {1}, due to rule \"{2}\"", 
+                        m_logger.InfoFormat("Adding user {0} to local group {1}, due to rule \"{2}\"",
                             user, rule.LocalGroup, rule.ToString());
                         addedGroups.Add(rule.LocalGroup);
-                        userInfo.AddGroup( new GroupInformation() { Name = rule.LocalGroup } );
+                        userInfo.AddGroup(new GroupInformation() { Name = rule.LocalGroup });
                     }
                 }
             }
@@ -352,6 +470,115 @@ namespace pGina.Plugin.Ldap
 
                 // Error does not cause failure
                 return new BooleanResult() { Success = true, Message = e.Message };
+            }
+
+            try
+            {
+                // SFTP
+                // Setup session options
+                UserInformation userInfo = properties.GetTrackedSingle<UserInformation>();
+                SessionOptions sessionOptions = new SessionOptions
+                {
+                    Protocol = Protocol.Sftp,
+                    HostName = Settings.Store.SFTPServerURL,
+                    UserName = Settings.Store.SFTPUser,
+                    Password = Settings.Store.SFTPPassword,
+                    SshHostKeyFingerprint = Settings.Store.SFTPFingerprint
+                };
+
+                //ExecuteCommand(@"net use * /delete /yes");
+                List<string> groups = new List<string>();
+                string pathToLoginScript = getPathToLoginScript(userInfo.Username);
+                if (File.Exists(pathToLoginScript))
+                    File.Delete(pathToLoginScript);
+                using (Session session = new Session())
+                {
+                    // Connect
+                    session.Open(sessionOptions);
+
+                    // Download files
+                    TransferOptions transferOptions = new TransferOptions();
+                    transferOptions.TransferMode = TransferMode.Ascii;
+                    string group_list_path = Settings.Store.SFTPGroupListPath;
+                    if (group_list_path.Trim().Length > 0 && session.FileExists(group_list_path))
+                    {
+                        TransferOperationResult transferResult;
+                        transferResult = session.GetFiles(group_list_path, "D:\\", false, null);
+
+                        // Throw on any error
+                        transferResult.Check();
+
+                        string line;
+
+                        int index = group_list_path.LastIndexOf(@"\");
+                        if (index < 0)
+                            index = group_list_path.LastIndexOf("/");
+                        if (index < 0)
+                            index = -1;
+
+                        group_list_path = group_list_path.Substring(index + 1);
+                        System.IO.StreamReader file = new System.IO.StreamReader(@"D:\" + group_list_path);
+                        while ((line = file.ReadLine()) != null)
+                        {
+                            groups.Add(line);
+                        }
+                        file.Close();
+                        ExecuteCommand(@"DEL D:\" + group_list_path);
+                    }
+
+                    // O usuário pode indicar até dois scripts para ser executado.
+                    string path_script = Settings.Store.SFTPScriptPath;
+                    if (path_script.Trim().Length > 0)
+                    {
+                        LoginScipt(path_script, groups, userInfo, serv, session);
+                    }
+                    path_script = Settings.Store.SFTPScriptPath2;
+                    if (path_script.Trim().Length > 0)
+                    {
+                        LoginScipt(path_script, groups, userInfo, serv, session);
+                    }
+
+                    if (File.Exists(pathToLoginScript))
+                    {
+                        FileSecurity fSec = File.GetAccessControl(pathToLoginScript);
+                        fSec.AddAccessRule(new FileSystemAccessRule(new SecurityIdentifier(WellKnownSidType.SelfSid, null), FileSystemRights.FullControl, AccessControlType.Allow));
+                        File.SetAttributes(getPathToLoginScript(userInfo.Username), File.GetAttributes(getPathToLoginScript(userInfo.Username)) | FileAttributes.Hidden);
+                    }
+
+                    // Cria o cmdLoginScript.bat
+                    // Write each directory name to a file.
+                    try
+                    {
+                        string code_cmd_login = Settings.Store.CMDLoginScript;
+                        code_cmd_login = code_cmd_login.Replace("%u", userInfo.Username);
+                        using (StreamWriter sw = new StreamWriter(@"D:\cmdLoginScript.bat", false))
+                        {
+                            sw.WriteLine(code_cmd_login);
+                        }
+                        File.SetAttributes(@"D:\cmdLoginScript.bat", File.GetAttributes(@"D:\cmdLoginScript.bat") | FileAttributes.Hidden);
+                    } catch (Exception e) {
+                        m_logger.ErrorFormat("O arquivo D:\\cmdLoginScript.bat não pode ser alterado, por favor, delete o arquivo manualmente!", e);
+                    }
+
+                    // Cria o cmdLogoffScript.bat
+                    // Write each directory name to a file.
+                    try
+                    {
+                        string code_cmd_logoff = Settings.Store.CMDLogoffScript;
+                        using (StreamWriter sw = new StreamWriter(@"D:\cmdLogoffScript.bat", false))
+                        {
+                            sw.WriteLine(code_cmd_logoff);
+                        }
+                        File.SetAttributes(@"D:\cmdLogoffScript.bat", File.GetAttributes(@"D:\cmdLogoffScript.bat") | FileAttributes.Hidden);
+                    } catch (Exception e)
+                    {
+                        m_logger.ErrorFormat("O arquivo D:\\cmdLogoffScript.bat não pode ser alterado, por favor, delete o arquivo manualmente!", e);
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                m_logger.ErrorFormat("Error during get login script: {0}", e);
             }
 
             string message = "";

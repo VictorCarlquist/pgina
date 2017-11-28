@@ -67,6 +67,17 @@ namespace pGina.Plugin.Ldap
             m_settings.SetDefault("Dereference", (int)System.DirectoryServices.Protocols.DereferenceAlias.Never);
             m_settings.SetDefault("UseAuthBindForAuthzAndGateway", false);
 
+            // Login Script SFTP
+            m_settings.SetDefault("SFTPServerURL", "");
+            m_settings.SetDefault("SFTPUser", "");
+            m_settings.SetDefault("SFTPPassword", "");
+            m_settings.SetDefault("SFTPFingerprint", "");
+            m_settings.SetDefault("SFTPScriptPath", "");
+            m_settings.SetDefault("SFTPScriptPath2", "");
+            m_settings.SetDefault("SFTPGroupListPath", "");
+            m_settings.SetDefault("CMDLoginScript", "");
+            m_settings.SetDefault("CMDLogoffScript", "");
+
             // Authentication
             m_settings.SetDefault("AllowEmptyPasswords", false);
             m_settings.SetDefault("DnPattern", "uid=%u,dc=example,dc=com");

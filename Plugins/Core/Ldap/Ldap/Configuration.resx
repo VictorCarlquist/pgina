@@ -126,4 +126,10 @@ stage, then always fail authorization.  This denies any login even when
 another authentication plugin succeeds (such as Local Machine).   This
 option is ignored if LDAP is not enabled for authentication.</value>
   </data>
+  <data name="txt_script_group_list_path.ToolTip" xml:space="preserve">
+    <value>Caso o %g seja utilizado, é necessário disponibilizar um arquivo no servidor SFTP com uma lista de grupos para o pGina verificar se o usuário pertence a algum grupo e executar o script com o nome do grupo. (Um grupo por linha)</value>
+  </data>
+  <data name="label21.ToolTip" xml:space="preserve">
+    <value>Caso o %g seja utilizado, é necessário disponibilizar um arquivo no servidor SFTP com uma lista de grupos para o pGina verificar se o usuário pertence a algum grupo e executar o script com o nome do grupo. (Um grupo por linha)</value>
+  </data>
 </root>

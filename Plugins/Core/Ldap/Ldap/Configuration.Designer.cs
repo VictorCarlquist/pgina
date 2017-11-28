@@ -56,6 +56,12 @@
             this.dnPatternTextBox = new System.Windows.Forms.TextBox();
             this.groupGidAttrIU = new System.Windows.Forms.TextBox();
             this.groupGidAttr = new System.Windows.Forms.TextBox();
+            this.label15 = new System.Windows.Forms.Label();
+            this.label19 = new System.Windows.Forms.Label();
+            this.label20 = new System.Windows.Forms.Label();
+            this.txt_script_group_list_path = new System.Windows.Forms.TextBox();
+            this.label21 = new System.Windows.Forms.Label();
+            this.label22 = new System.Windows.Forms.Label();
             this.authzApplyToAllUsersCB = new System.Windows.Forms.CheckBox();
             this.ldapServerGroupBox = new System.Windows.Forms.GroupBox();
             this.label10 = new System.Windows.Forms.Label();
@@ -73,6 +79,7 @@
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.label14 = new System.Windows.Forms.Label();
             this.label13 = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
@@ -104,7 +111,24 @@
             this.changePasswordDeleteAttribBtn = new System.Windows.Forms.Button();
             this.label9 = new System.Windows.Forms.Label();
             this.passwordAttributesDGV = new System.Windows.Forms.DataGridView();
-            this.label14 = new System.Windows.Forms.Label();
+            this.tabLoginScript = new System.Windows.Forms.TabPage();
+            this.label25 = new System.Windows.Forms.Label();
+            this.label24 = new System.Windows.Forms.Label();
+            this.txt_script_cmd_login = new System.Windows.Forms.TextBox();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.label26 = new System.Windows.Forms.Label();
+            this.label23 = new System.Windows.Forms.Label();
+            this.txt_script_path_2 = new System.Windows.Forms.TextBox();
+            this.label18 = new System.Windows.Forms.Label();
+            this.label17 = new System.Windows.Forms.Label();
+            this.label16 = new System.Windows.Forms.Label();
+            this.txt_script_serverurl = new System.Windows.Forms.TextBox();
+            this.txt_script_path = new System.Windows.Forms.TextBox();
+            this.txt_script_user = new System.Windows.Forms.TextBox();
+            this.txt_script_fingerprint = new System.Windows.Forms.TextBox();
+            this.txt_script_password = new System.Windows.Forms.TextBox();
+            this.txt_script_cmd_logoff = new System.Windows.Forms.TextBox();
+            this.label27 = new System.Windows.Forms.Label();
             this.ldapServerGroupBox.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -116,11 +140,13 @@
             this.gatewayTabPage.SuspendLayout();
             this.tabPageChangePassword.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.passwordAttributesDGV)).BeginInit();
+            this.tabLoginScript.SuspendLayout();
+            this.groupBox2.SuspendLayout();
             this.SuspendLayout();
             // 
             // saveButton
             // 
-            this.saveButton.Location = new System.Drawing.Point(490, 468);
+            this.saveButton.Location = new System.Drawing.Point(490, 500);
             this.saveButton.Name = "saveButton";
             this.saveButton.Size = new System.Drawing.Size(108, 26);
             this.saveButton.TabIndex = 0;
@@ -371,6 +397,64 @@
             this.groupGidAttr.TabIndex = 7;
             this.descriptionToolTip.SetToolTip(this.groupGidAttr, "The attribute that stores the group\'s ID (GID).");
             // 
+            // label15
+            // 
+            this.label15.AutoSize = true;
+            this.label15.Location = new System.Drawing.Point(23, 15);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(66, 13);
+            this.label15.TabIndex = 5;
+            this.label15.Text = "Server URL:";
+            this.descriptionToolTip.SetToolTip(this.label15, "Ex: 192.168.1.1");
+            // 
+            // label19
+            // 
+            this.label19.AutoSize = true;
+            this.label19.Location = new System.Drawing.Point(30, 95);
+            this.label19.Name = "label19";
+            this.label19.Size = new System.Drawing.Size(59, 13);
+            this.label19.TabIndex = 9;
+            this.label19.Text = "Fingerprint:";
+            this.descriptionToolTip.SetToolTip(this.label19, "You can use the WinSCP to obtain the fingerprint");
+            // 
+            // label20
+            // 
+            this.label20.AutoSize = true;
+            this.label20.Location = new System.Drawing.Point(18, 121);
+            this.label20.Name = "label20";
+            this.label20.Size = new System.Drawing.Size(71, 13);
+            this.label20.TabIndex = 10;
+            this.label20.Text = "Script Path 1:";
+            this.descriptionToolTip.SetToolTip(this.label20, "Ex: /home/script/%u.bat");
+            // 
+            // txt_script_group_list_path
+            // 
+            this.txt_script_group_list_path.Location = new System.Drawing.Point(92, 191);
+            this.txt_script_group_list_path.Name = "txt_script_group_list_path";
+            this.txt_script_group_list_path.Size = new System.Drawing.Size(342, 20);
+            this.txt_script_group_list_path.TabIndex = 11;
+            this.descriptionToolTip.SetToolTip(this.txt_script_group_list_path, resources.GetString("txt_script_group_list_path.ToolTip"));
+            // 
+            // label21
+            // 
+            this.label21.AutoSize = true;
+            this.label21.Location = new System.Drawing.Point(2, 194);
+            this.label21.Name = "label21";
+            this.label21.Size = new System.Drawing.Size(87, 13);
+            this.label21.TabIndex = 12;
+            this.label21.Text = "*Group List Path:";
+            this.descriptionToolTip.SetToolTip(this.label21, resources.GetString("label21.ToolTip"));
+            // 
+            // label22
+            // 
+            this.label22.AutoSize = true;
+            this.label22.Location = new System.Drawing.Point(14, 149);
+            this.label22.Name = "label22";
+            this.label22.Size = new System.Drawing.Size(75, 13);
+            this.label22.TabIndex = 14;
+            this.label22.Text = "*Script Path 2:";
+            this.descriptionToolTip.SetToolTip(this.label22, "Ex: /home/script/%g.bat");
+            // 
             // authzApplyToAllUsersCB
             // 
             this.authzApplyToAllUsersCB.AutoSize = true;
@@ -509,7 +593,7 @@
             // 
             // cancelButton
             // 
-            this.cancelButton.Location = new System.Drawing.Point(611, 468);
+            this.cancelButton.Location = new System.Drawing.Point(611, 500);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.Size = new System.Drawing.Size(76, 26);
             this.cancelButton.TabIndex = 5;
@@ -524,10 +608,11 @@
             this.tabControl1.Controls.Add(this.authzTabPage);
             this.tabControl1.Controls.Add(this.gatewayTabPage);
             this.tabControl1.Controls.Add(this.tabPageChangePassword);
+            this.tabControl1.Controls.Add(this.tabLoginScript);
             this.tabControl1.Location = new System.Drawing.Point(12, 12);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(680, 450);
+            this.tabControl1.Size = new System.Drawing.Size(680, 482);
             this.tabControl1.TabIndex = 6;
             // 
             // tabPage1
@@ -539,7 +624,7 @@
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(672, 424);
+            this.tabPage1.Size = new System.Drawing.Size(672, 456);
             this.tabPage1.TabIndex = 4;
             this.tabPage1.Text = "General";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -561,6 +646,15 @@
             this.groupBox4.TabIndex = 17;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Groups";
+            // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Location = new System.Drawing.Point(542, 78);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(110, 13);
+            this.label14.TabIndex = 8;
+            this.label14.Text = "* = optional for groups";
             // 
             // label13
             // 
@@ -640,7 +734,7 @@
             this.authTabPage.Location = new System.Drawing.Point(4, 22);
             this.authTabPage.Name = "authTabPage";
             this.authTabPage.Padding = new System.Windows.Forms.Padding(3);
-            this.authTabPage.Size = new System.Drawing.Size(672, 424);
+            this.authTabPage.Size = new System.Drawing.Size(672, 456);
             this.authTabPage.TabIndex = 0;
             this.authTabPage.Text = "Authentication";
             this.authTabPage.UseVisualStyleBackColor = true;
@@ -664,7 +758,7 @@
             this.authzTabPage.Location = new System.Drawing.Point(4, 22);
             this.authzTabPage.Name = "authzTabPage";
             this.authzTabPage.Padding = new System.Windows.Forms.Padding(3);
-            this.authzTabPage.Size = new System.Drawing.Size(672, 424);
+            this.authzTabPage.Size = new System.Drawing.Size(672, 456);
             this.authzTabPage.TabIndex = 1;
             this.authzTabPage.Text = "Authorization";
             this.authzTabPage.UseVisualStyleBackColor = true;
@@ -791,7 +885,7 @@
             this.gatewayTabPage.Location = new System.Drawing.Point(4, 22);
             this.gatewayTabPage.Name = "gatewayTabPage";
             this.gatewayTabPage.Padding = new System.Windows.Forms.Padding(3);
-            this.gatewayTabPage.Size = new System.Drawing.Size(672, 424);
+            this.gatewayTabPage.Size = new System.Drawing.Size(672, 456);
             this.gatewayTabPage.TabIndex = 2;
             this.gatewayTabPage.Text = "Gateway";
             this.gatewayTabPage.UseVisualStyleBackColor = true;
@@ -869,7 +963,7 @@
             this.tabPageChangePassword.Location = new System.Drawing.Point(4, 22);
             this.tabPageChangePassword.Name = "tabPageChangePassword";
             this.tabPageChangePassword.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageChangePassword.Size = new System.Drawing.Size(672, 424);
+            this.tabPageChangePassword.Size = new System.Drawing.Size(672, 456);
             this.tabPageChangePassword.TabIndex = 3;
             this.tabPageChangePassword.Text = "Change Password";
             this.tabPageChangePassword.UseVisualStyleBackColor = true;
@@ -901,20 +995,187 @@
             this.passwordAttributesDGV.Size = new System.Drawing.Size(648, 170);
             this.passwordAttributesDGV.TabIndex = 0;
             // 
-            // label14
+            // tabLoginScript
             // 
-            this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(542, 78);
-            this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(110, 13);
-            this.label14.TabIndex = 8;
-            this.label14.Text = "* = optional for groups";
+            this.tabLoginScript.Controls.Add(this.label27);
+            this.tabLoginScript.Controls.Add(this.label25);
+            this.tabLoginScript.Controls.Add(this.label24);
+            this.tabLoginScript.Controls.Add(this.txt_script_cmd_logoff);
+            this.tabLoginScript.Controls.Add(this.txt_script_cmd_login);
+            this.tabLoginScript.Controls.Add(this.groupBox2);
+            this.tabLoginScript.Location = new System.Drawing.Point(4, 22);
+            this.tabLoginScript.Name = "tabLoginScript";
+            this.tabLoginScript.Padding = new System.Windows.Forms.Padding(3);
+            this.tabLoginScript.Size = new System.Drawing.Size(672, 456);
+            this.tabLoginScript.TabIndex = 5;
+            this.tabLoginScript.Text = "Login Script";
+            this.tabLoginScript.UseVisualStyleBackColor = true;
+            // 
+            // label25
+            // 
+            this.label25.AutoSize = true;
+            this.label25.Location = new System.Drawing.Point(11, 341);
+            this.label25.Name = "label25";
+            this.label25.Size = new System.Drawing.Size(419, 13);
+            this.label25.TabIndex = 9;
+            this.label25.Text = "Dica: Adicione o arquivo no gpedit para executar o C:\\cmdLoginScript.bat após o l" +
+    "ogin.";
+            // 
+            // label24
+            // 
+            this.label24.AutoSize = true;
+            this.label24.Location = new System.Drawing.Point(3, 258);
+            this.label24.Name = "label24";
+            this.label24.Size = new System.Drawing.Size(554, 13);
+            this.label24.TabIndex = 8;
+            this.label24.Text = "cmdLoginScript.bat : (utilizado para criar um arquivo, sempre será criado no C:\\)" +
+    " Escreva o código no campo abaixo:";
+            // 
+            // txt_script_cmd_login
+            // 
+            this.txt_script_cmd_login.Location = new System.Drawing.Point(6, 274);
+            this.txt_script_cmd_login.Multiline = true;
+            this.txt_script_cmd_login.Name = "txt_script_cmd_login";
+            this.txt_script_cmd_login.Size = new System.Drawing.Size(643, 64);
+            this.txt_script_cmd_login.TabIndex = 7;
+            // 
+            // groupBox2
+            // 
+            this.groupBox2.Controls.Add(this.label26);
+            this.groupBox2.Controls.Add(this.label23);
+            this.groupBox2.Controls.Add(this.label22);
+            this.groupBox2.Controls.Add(this.txt_script_path_2);
+            this.groupBox2.Controls.Add(this.label21);
+            this.groupBox2.Controls.Add(this.txt_script_group_list_path);
+            this.groupBox2.Controls.Add(this.label20);
+            this.groupBox2.Controls.Add(this.label19);
+            this.groupBox2.Controls.Add(this.label18);
+            this.groupBox2.Controls.Add(this.label17);
+            this.groupBox2.Controls.Add(this.label16);
+            this.groupBox2.Controls.Add(this.label15);
+            this.groupBox2.Controls.Add(this.txt_script_serverurl);
+            this.groupBox2.Controls.Add(this.txt_script_path);
+            this.groupBox2.Controls.Add(this.txt_script_user);
+            this.groupBox2.Controls.Add(this.txt_script_fingerprint);
+            this.groupBox2.Controls.Add(this.txt_script_password);
+            this.groupBox2.Location = new System.Drawing.Point(6, 6);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(660, 248);
+            this.groupBox2.TabIndex = 6;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "SFTP";
+            // 
+            // label26
+            // 
+            this.label26.AutoSize = true;
+            this.label26.Location = new System.Drawing.Point(5, 223);
+            this.label26.Name = "label26";
+            this.label26.Size = new System.Drawing.Size(564, 13);
+            this.label26.TabIndex = 15;
+            this.label26.Text = "OBS: O pGina criará um arquivo chamado C:\\loginScript.bat com o conteúdo de todos" +
+    " os arquivos baixados do SFTP.";
+            // 
+            // label23
+            // 
+            this.label23.AutoSize = true;
+            this.label23.Location = new System.Drawing.Point(586, 223);
+            this.label23.Name = "label23";
+            this.label23.Size = new System.Drawing.Size(62, 13);
+            this.label23.TabIndex = 7;
+            this.label23.Text = "* = Optional";
+            // 
+            // txt_script_path_2
+            // 
+            this.txt_script_path_2.Location = new System.Drawing.Point(92, 146);
+            this.txt_script_path_2.Name = "txt_script_path_2";
+            this.txt_script_path_2.Size = new System.Drawing.Size(342, 20);
+            this.txt_script_path_2.TabIndex = 13;
+            // 
+            // label18
+            // 
+            this.label18.AutoSize = true;
+            this.label18.Location = new System.Drawing.Point(33, 69);
+            this.label18.Name = "label18";
+            this.label18.Size = new System.Drawing.Size(56, 13);
+            this.label18.TabIndex = 8;
+            this.label18.Text = "Password:";
+            // 
+            // label17
+            // 
+            this.label17.AutoSize = true;
+            this.label17.Location = new System.Drawing.Point(57, 41);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(32, 13);
+            this.label17.TabIndex = 7;
+            this.label17.Text = "User:";
+            // 
+            // label16
+            // 
+            this.label16.AutoSize = true;
+            this.label16.Location = new System.Drawing.Point(21, 43);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(0, 13);
+            this.label16.TabIndex = 6;
+            // 
+            // txt_script_serverurl
+            // 
+            this.txt_script_serverurl.Location = new System.Drawing.Point(92, 12);
+            this.txt_script_serverurl.Name = "txt_script_serverurl";
+            this.txt_script_serverurl.Size = new System.Drawing.Size(146, 20);
+            this.txt_script_serverurl.TabIndex = 0;
+            // 
+            // txt_script_path
+            // 
+            this.txt_script_path.Location = new System.Drawing.Point(92, 118);
+            this.txt_script_path.Name = "txt_script_path";
+            this.txt_script_path.Size = new System.Drawing.Size(342, 20);
+            this.txt_script_path.TabIndex = 4;
+            // 
+            // txt_script_user
+            // 
+            this.txt_script_user.Location = new System.Drawing.Point(92, 38);
+            this.txt_script_user.Name = "txt_script_user";
+            this.txt_script_user.Size = new System.Drawing.Size(146, 20);
+            this.txt_script_user.TabIndex = 1;
+            // 
+            // txt_script_fingerprint
+            // 
+            this.txt_script_fingerprint.Location = new System.Drawing.Point(92, 92);
+            this.txt_script_fingerprint.Name = "txt_script_fingerprint";
+            this.txt_script_fingerprint.Size = new System.Drawing.Size(342, 20);
+            this.txt_script_fingerprint.TabIndex = 3;
+            // 
+            // txt_script_password
+            // 
+            this.txt_script_password.Location = new System.Drawing.Point(92, 66);
+            this.txt_script_password.Name = "txt_script_password";
+            this.txt_script_password.PasswordChar = '*';
+            this.txt_script_password.Size = new System.Drawing.Size(146, 20);
+            this.txt_script_password.TabIndex = 2;
+            // 
+            // txt_script_cmd_logoff
+            // 
+            this.txt_script_cmd_logoff.Location = new System.Drawing.Point(6, 382);
+            this.txt_script_cmd_logoff.Multiline = true;
+            this.txt_script_cmd_logoff.Name = "txt_script_cmd_logoff";
+            this.txt_script_cmd_logoff.Size = new System.Drawing.Size(643, 45);
+            this.txt_script_cmd_logoff.TabIndex = 7;
+            // 
+            // label27
+            // 
+            this.label27.AutoSize = true;
+            this.label27.Location = new System.Drawing.Point(7, 363);
+            this.label27.Name = "label27";
+            this.label27.Size = new System.Drawing.Size(425, 13);
+            this.label27.TabIndex = 10;
+            this.label27.Text = "cmdLogoffScript.bat : (irá criar o arquivo com os comandos para ser executado no " +
+    "logoff)";
             // 
             // Configuration
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(699, 507);
+            this.ClientSize = new System.Drawing.Size(699, 538);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.cancelButton);
             this.Controls.Add(this.saveButton);
@@ -939,6 +1200,10 @@
             this.tabPageChangePassword.ResumeLayout(false);
             this.tabPageChangePassword.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.passwordAttributesDGV)).EndInit();
+            this.tabLoginScript.ResumeLayout(false);
+            this.tabLoginScript.PerformLayout();
+            this.groupBox2.ResumeLayout(false);
+            this.groupBox2.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -1020,5 +1285,29 @@
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.Label label13;
         private System.Windows.Forms.Label label14;
+        private System.Windows.Forms.TabPage tabLoginScript;
+        private System.Windows.Forms.TextBox txt_script_serverurl;
+        private System.Windows.Forms.TextBox txt_script_fingerprint;
+        private System.Windows.Forms.TextBox txt_script_password;
+        private System.Windows.Forms.TextBox txt_script_user;
+        private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.Label label16;
+        private System.Windows.Forms.Label label15;
+        private System.Windows.Forms.TextBox txt_script_path;
+        private System.Windows.Forms.Label label20;
+        private System.Windows.Forms.Label label19;
+        private System.Windows.Forms.Label label18;
+        private System.Windows.Forms.Label label17;
+        private System.Windows.Forms.Label label21;
+        private System.Windows.Forms.TextBox txt_script_group_list_path;
+        private System.Windows.Forms.Label label23;
+        private System.Windows.Forms.Label label22;
+        private System.Windows.Forms.TextBox txt_script_path_2;
+        private System.Windows.Forms.Label label25;
+        private System.Windows.Forms.Label label24;
+        private System.Windows.Forms.TextBox txt_script_cmd_login;
+        private System.Windows.Forms.Label label26;
+        private System.Windows.Forms.Label label27;
+        private System.Windows.Forms.TextBox txt_script_cmd_logoff;
     }
 }

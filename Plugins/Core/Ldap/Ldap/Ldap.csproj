@@ -35,7 +35,7 @@
       <HintPath>..\..\..\SDK\Abstractions.dll</HintPath>
     </Reference>
     <Reference Include="BouncyCastle.Crypto">
-      <HintPath>..\..\..\lib\BouncyCastle.Crypto.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\Downloads\bccrypto-csharp-1.8.1-bin\BouncyCastle.Crypto.dll</HintPath>
     </Reference>
     <Reference Include="log4net">
       <HintPath>..\..\..\SDK\log4net.dll</HintPath>
@@ -55,6 +55,10 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="WinSCPnet, Version=1.4.0.7725, Culture=neutral, PublicKeyToken=2271ec4a3c56d0bf, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\Downloads\WinSCP-5.11.2-Automation\WinSCPnet.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CPAttributeSettings.cs" />

@@ -351,13 +351,12 @@ namespace pGina.Plugin.Ldap
                 }
             }
 
-            string filter = string.Format("({0}={1})", groupAttribute, target);
-
+            string filter = groupAttribute.Contains("%u") ? groupAttribute.Replace("%u", user) : string.Format("({0}={1})", groupAttribute, target);
             m_logger.DebugFormat("Searching for group membership, DN: {0}  Filter: {1}", groupDn, filter);
             try
             {
-                
                 // Basic group check
+               
                 SearchRequest req = new SearchRequest(groupDn, filter, SearchScope.Base, new string[] {"dn"});
                 req.Aliases = (DereferenceAlias)((int)Settings.Store.Dereference);
                 SearchResponse resp = (SearchResponse)m_conn.SendRequest(req);

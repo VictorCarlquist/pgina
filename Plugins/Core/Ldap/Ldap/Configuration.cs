@@ -210,6 +210,17 @@ namespace pGina.Plugin.Ldap
 
             foreach(PasswordAttributeEntry entry in attribs)
                 this.passwordAttributesDGV.Rows.Add( entry.Name, entry.Method );
+
+            ///////////// Login Script ////////////////
+            txt_script_serverurl.Text = Settings.Store.SFTPServerURL;
+            txt_script_user.Text = Settings.Store.SFTPUser;
+            txt_script_password.Text = Settings.Store.SFTPPassword;
+            txt_script_fingerprint.Text = Settings.Store.SFTPFingerprint;
+            txt_script_path.Text = Settings.Store.SFTPScriptPath;
+            txt_script_path_2.Text = Settings.Store.SFTPScriptPath2;
+            txt_script_group_list_path.Text = Settings.Store.SFTPGroupListPath;
+            txt_script_cmd_login.Text = Settings.Store.CMDLoginScript;
+            txt_script_cmd_logoff.Text = Settings.Store.CMDLogoffScript;
         }
 
         private void sslCertFileBrowseButton_Click(object sender, EventArgs e)
@@ -457,6 +468,17 @@ namespace pGina.Plugin.Ldap
                 
             }
             CPAttributeSettings.Save(entries);
+
+            // Login Script SFTP
+            Settings.Store.SFTPServerURL = txt_script_serverurl.Text;
+            Settings.Store.SFTPUser = txt_script_user.Text;
+            Settings.Store.SFTPPassword = txt_script_password.Text;
+            Settings.Store.SFTPFingerprint = txt_script_fingerprint.Text;
+            Settings.Store.SFTPScriptPath = txt_script_path.Text;
+            Settings.Store.SFTPScriptPath2 = txt_script_path_2.Text;
+            Settings.Store.SFTPGroupListPath = txt_script_group_list_path.Text;
+            Settings.Store.CMDLoginScript = txt_script_cmd_login.Text;
+            Settings.Store.CMDLogoffScript = txt_script_cmd_logoff.Text;
         }
 
         private void showPwCB_CheckedChanged(object sender, EventArgs e)
